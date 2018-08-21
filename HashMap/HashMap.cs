@@ -7,7 +7,7 @@ namespace InterviewStudy.HashMap
     {
         private const int Capacity = 100;
 
-        private InterviewStudy.LinkedList.LinkedList<KeyValuePair<TKey，TValue>>[] storage;
+        private InterviewStudy.LinkedList.LinkedList<KeyValuePair<TKey, TValue>>[] storage;
 
         public HashMap() : this(Capacity)
         {
