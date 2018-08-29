@@ -40,7 +40,7 @@ namespace InterviewStudy.BinarySearchTree
 
         public bool Contains(TKey key)
         {
-            return Get(key).Equals(default(TValue));
+            return !Get(key).Equals(default(TValue));
         }
 
         public void Delete(TKey key)
