@@ -115,6 +115,103 @@ namespace InterviewStudy.BinarySearchTree
             }
         }
 
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraverseInOrder()
+        {
+            if (root == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var stack = new Stack<BinaryTreeNode<KeyValuePair<TKey, TValue>>>();
+            if (root.RightChild != null)
+            {
+                stack.Push(root.RightChild);
+            }
+
+            stack.Push(root);
+
+            if (root.LeftChild != null)
+            {
+                stack.Push(root.LeftChild);
+            }
+
+            while (stack.Count > 0)
+            {
+                var node = stack.Pop();
+                if (node.RightChild != null)
+                {
+                    stack.Push(node.RightChild);
+                }
+
+                if (node.LeftChild == null)
+                {
+                    yield return node.Value;
+                }
+                else
+                {
+                    stack.Push(node);
+                    stack.Push(node.LeftChild);
+                }
+            }
+        }
+
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraversePostOrder()
+        {
+            if (root == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var stack = new Stack<BinaryTreeNode<KeyValuePair<TKey, TValue>>>();
+            stack.Push(root);
+            while (stack.Count > 0)
+            {
+                var node = stack.Pop();
+                if (node.LeftChild == null && node.RightChild == null)
+                {
+                    yield return node.Value;
+                }
+                else
+                {
+                    stack.Push(node);
+                    if (node.RightChild != null)
+                    {
+                        stack.Push(node.RightChild);
+                    }
+                    
+                    if (node.LeftChild != null)
+                    {
+                        stack.Push(node.LeftChild);
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<KeyValuePair<TKey, TValue>> TraversePreOrder()
+        {
+            if (root == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            var queue = new Queue<BinaryTreeNode<KeyValuePair<TKey, TValue>>>();
+            queue.Enqueue(root);
+            while (queue.Count > 0)
+            {
+                var node = queue.Dequeue();
+                yield return node.Value;
+                if (node.LeftChild != null)
+                {
+                    queue.Enqueue(node.LeftChild);
+                }
+
+                if (node.RightChild != null)
+                {
+                    queue.Enqueue(node.RightChild);
+                }
+            }
+        }
+
         private void FixParentLink(BinaryTreeNode<KeyValuePair<TKey, TValue>> parent,
             BinaryTreeNode<KeyValuePair<TKey, TValue>> oldChild,
             BinaryTreeNode<KeyValuePair<TKey, TValue>> newChild)
