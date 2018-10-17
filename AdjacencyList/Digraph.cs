@@ -29,5 +29,52 @@ namespace InterviewStudy.AdjacencyList
             adjacencyList[v].Add(w);
             EdgeNumber++;
         }
+
+        public Stack<int> GetTopologicalSort()
+        {
+            var stack = new Stack<int>();
+            var unvisited = 0;
+            var visited = new bool[VertexNumber];
+            while (true)
+            {
+                while (unvisited < VertexNumber && visited[unvisited])
+                {
+                    unvisited++;
+                }
+
+                if (unvisited == VertexNumber)
+                {
+                    break;
+                }
+
+                DfsForTopologicalSort(new HashSet<int>(), stack, unvisited, visited);
+            }
+
+            return stack;
+        }
+
+        private void DfsForTopologicalSort(HashSet<int> leadingPath, Stack<int> stack, int vertex, bool[] visited)
+        {
+            var leadingPathClone = new HashSet<int>(leadingPath);
+            leadingPathClone.Add(vertex);
+            var neighours = GetAdjacentVertices(vertex);
+            foreach (var neighour in neighours)
+            {
+                if (visited[neighour])
+                {
+                    if (leadingPath.Contains(neighour))
+                    {
+                        throw new InvalidOperationException("The graph is not a DAG.");
+                    }
+                }
+                else
+                {
+                    DfsForTopologicalSort(leadingPathClone, stack, neighour, visited);
+                }
+            }
+
+            visited[vertex] = true;
+            stack.Push(vertex);
+        }
     }
 }
